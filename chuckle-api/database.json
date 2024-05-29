@@ -24,6 +24,31 @@
       "id": 5,
       "text": "I failed math so many times at school, I can’t even count",
       "told": true
+    },
+    {
+      "text": "knock knock",
+      "told": false,
+      "id": 6
+    },
+    {
+      "text": "who's there",
+      "told": false,
+      "id": 7
+    },
+    {
+      "text": "??????",
+      "told": false,
+      "id": 8
+    },
+    {
+      "text": "!!!!!!!!!!!!!",
+      "told": false,
+      "id": 9
+    },
+    {
+      "text": "####",
+      "told": false,
+      "id": 10
     }
   ]
 }
