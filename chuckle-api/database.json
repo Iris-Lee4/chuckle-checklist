@@ -3,11 +3,6 @@
     {
       "id": 1,
       "text": "I went to buy some camo pants but couldn’t find any.",
-      "told": true
-    },
-    {
-      "id": 2,
-      "text": "I always find elevator jokes to be uplifting.",
       "told": false
     },
     {
@@ -28,11 +23,6 @@
     {
       "id": 6,
       "text": "hahaha",
-      "told": false
-    },
-    {
-      "id": 7,
-      "text": "chucky says hi",
       "told": true
     }
   ]

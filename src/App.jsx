@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react"
 import "./App.css"
-import { submitJoke, updateJoke } from "./services/jokeService.jsx"
+import { deleteJoke, submitJoke, updateJoke } from "./services/jokeService.jsx"
 import stevePic from "./assets/steve.png"
 import { getAllJokes } from "./services/allJokes.jsx"
 
@@ -66,6 +66,12 @@ export const App = () => {
     updateJoke(changedJoke).then(() => {
       getAndSetJokes()
     })
+  }
+
+  const handleJokeDelete = (joke) => {
+      deleteJoke(joke).then(() => {
+        getAndSetJokes()
+      }) 
   }
 
 // //filter for untold jokes
@@ -135,6 +141,13 @@ export const App = () => {
                     <p className="joke-list-item-text">
                       {joke.text}
                     </p>
+                    <div className="joke-list-action-delete">
+                    <button
+                      onClick={() => handleJokeDelete(joke)}
+                    >
+                      DELETE
+                    </button>
+                  </div>
                     <div className="joke-list-action-toggle">
                     <button
                       onClick={() => handleJokeStatusChange(joke)}
@@ -158,6 +171,13 @@ export const App = () => {
                       <p className="joke-list-item-text">
                         {joke.text}
                       </p>
+                      <div className="joke-list-action-delete">
+                      <button
+                        onClick={() => handleJokeDelete(joke)}
+                      >
+                        DELETE
+                      </button>
+                    </div>
                       <div className="joke-list-action-toggle">
                         <button
                         onClick={() => handleJokeStatusChange(joke)}

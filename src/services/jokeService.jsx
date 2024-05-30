@@ -18,3 +18,9 @@ export const updateJoke = (joke) => {
         body: JSON.stringify(joke)
     })
 }
+
+export const deleteJoke = (joke) => {
+    return fetch (`http://localhost:8088/jokes/${joke.id}`, {
+        method: 'DELETE',
+    })
+}
