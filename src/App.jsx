@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react"
 import "./App.css"
-import { submitJoke } from "./services/jokeService.jsx"
+import { submitJoke, updateJoke } from "./services/jokeService.jsx"
 import stevePic from "./assets/steve.png"
 import { getAllJokes } from "./services/allJokes.jsx"
 
@@ -25,39 +25,82 @@ export const App = () => {
     }) 
   }, [])
 
-//filter for untold jokes
-    useEffect(() => {
-      if (untoldJokes) {
-        const untoldJokesArray = allJokes.filter(
-          (joke) => joke.told === false
-        )
-        setUntoldJokes(untoldJokesArray)
-    }}, [allJokes])
 
-  //filter for told jokes
+  //for jokes
   useEffect(() => {
-    if (toldJokes) {
-      const toldJokesArray = allJokes.filter(
-        (joke) => joke.told === true
-      )
-      setToldJokes(toldJokesArray)
+    const untoldJokesArray = allJokes?.filter(
+            (joke) => joke.told === false
+            )
+            setUntoldJokes(untoldJokesArray)
+    const toldJokesArray = allJokes?.filter(
+             (joke) => joke.told === true
+             )
+            setToldJokes(toldJokesArray)
 
-  }}, [allJokes, joke])
+    const countUntoldJokes = untoldJokes.length
+          setCountUntold(countUntoldJokes)
 
-  //count untold jokes
-  useEffect(() => {
-    const count = untoldJokes.length
-    setCountUntold(count)
-  }, [untoldJokes])
+    const countToldJokes = toldJokes.length
+          setCountTold(countToldJokes)
+  }, [untoldJokes.length, toldJokes.length, allJokes])
 
-  //count told jokes
-  useEffect(() => {
-    const count = toldJokes.length
-    setCountTold(count)
-  }, [toldJokes])
+  const handleSubmitJoke = () => {
+    submitJoke({text: joke, told: false}).then(response => (getAllJokes()).then((jokesArray) => {
+      setAllJokes(jokesArray)}),
+      setJoke("")
+  )}
+
+  const getAndSetJokes = () => [
+    getAllJokes().then((jokeArr) => {
+      setAllJokes(jokeArr)
+    })
+  ]
+
+  const handleJokeStatusChange = (joke) => {
+    const changedJoke = {
+      id: joke.id,
+      text: joke.text,
+      told: !joke.told,
+    }
+
+    updateJoke(changedJoke).then(() => {
+      getAndSetJokes()
+    })
+  }
+
+// //filter for untold jokes
+//     useEffect(() => {
+//         const untoldJokesArray = allJokes.filter(
+//           (joke) => joke.told === false
+//         )
+//         setUntoldJokes(untoldJokesArray)
+//     }, [allJokes])
+
+//   //filter for told jokes
+//   useEffect(() => {
+  
+//       const toldJokesArray = allJokes.filter(
+//         (joke) => joke.told === true
+//       )
+//       setToldJokes(toldJokesArray)
+
+//   }, [allJokes])
+
+//   //count untold jokes
+//   useEffect(() => {
+//     const count = untoldJokes.length
+//     setCountUntold(count)
+//   }, [untoldJokes])
+
+//   //count told jokes
+//   useEffect(() => {
+//     const count = toldJokes.length
+//     setCountTold(count)
+//   }, [toldJokes])
 
 
-  return <div className="app-container">
+  return (
+  <div className="app-container">
     <div className="app-heading">
       <div className="app-heading-circle">
         <img className="app-logo" src={stevePic} alt="Good job Steve" />
@@ -73,9 +116,7 @@ export const App = () => {
           onChange={handleChange}
           />
       {/* add .then to render page with empty string upon clicking button */}
-        <button onClick = { () => {
-                    submitJoke({text: joke, told: false}).then(setJoke(""))}
-                  }
+        <button onClick = {handleSubmitJoke}
                 className="joke-input-submit"
                 type="submit"
                 >
@@ -87,11 +128,20 @@ export const App = () => {
            <h2>Untold
                   <span className="untold-count">{countUntold}</span>
            </h2>
-            {untoldJokes.map(joke => {
+            {untoldJokes?.map(joke =>  {
               return (
                 <ul key={joke.id}>
                   <li className="joke-list-item">
-                    <p className="joke-list-item-text">{joke.text}</p>
+                    <p className="joke-list-item-text">
+                      {joke.text}
+                    </p>
+                    <div className="joke-list-action-toggle">
+                    <button
+                      onClick={() => handleJokeStatusChange(joke)}
+                    >
+                      UNTOLD
+                    </button>
+                  </div>
                   </li>
                 </ul>
                 )
@@ -101,11 +151,20 @@ export const App = () => {
             <h2>Told
               <span className="told-count">{countTold}</span>
             </h2>
-              {toldJokes.map(joke => {
+              {toldJokes?.map(joke => {
                 return (
                   <ul key={joke.id}>
                     <li className="joke-list-item">
-                      <p className="joke-list-item-text">{joke.text}</p>
+                      <p className="joke-list-item-text">
+                        {joke.text}
+                      </p>
+                      <div className="joke-list-action-toggle">
+                        <button
+                        onClick={() => handleJokeStatusChange(joke)}
+                        >
+                          TOLD
+                        </button>
+                      </div>
                     </li>
                 </ul>
                 )
@@ -113,4 +172,5 @@ export const App = () => {
         </div>
       </div> 
   </div>
+  )
 }
